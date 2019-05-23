@@ -4,7 +4,6 @@ rules:
       - regexp: .[^s](:|\"|\')(//)[^\s]
     message: |
       Use HTTPS for embedded resources where possible.
-
       Always use HTTPS (https:) for images and other media files, style sheets, and scripts
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Protocol
     glob:
@@ -23,13 +22,10 @@ rules:
 
   - id: 2.2.1.google.html-css.indentation
     pattern: 
-      - regexp: '[^" "](   |     )[^" "]'
-      - regexp: '[\t]'
-      - regexp: '[\t][ ]'
-      - regexp: '[ ][\t]'
+      - regexp: '^( )(  )*?\S'
+      - regexp: '\t'
     message: |
       Indent by 2 spaces at a time.
-
       Don’t use tabs or mix tabs and spaces for indentation.
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Indentation
     glob:
@@ -40,8 +36,9 @@ rules:
       -  '<li>Great'
       -  'color: blue;'
     fail:
-      -  '\   <li>Fantastic'
-      -  '\   \ color: blue;'
+      -  ' <li>Fantastic'
+      -  '   <li>Great'
+      -  '     color: blue;'
 
   - id: 2.2.2.google.html-css.capitalization
     pattern:
@@ -51,12 +48,8 @@ rules:
         - regexp: <[A-Z](\w| |-)*=
     message: |
       All code has to be lowercase
-
       This applies to HTML element names, attributes, attribute values (unless text/CDATA), CSS selectors, properties, and property values (with the exception of strings).
       See: https://google.github.io/styleguide/htmlcssguide.html#Capitalization
-    justification:
-      - unless text/CDATA
-      - strings
     glob:
       - "**/*.html"
       - "**/*.css"
@@ -69,10 +62,9 @@ rules:
 
   - id: 2.2.3.google.html-css.whitespace
     pattern: 
-      - regexp: '( )\n'
+      - regexp: '[ \t]+$'
     message: |
       Remove trailing white spaces.
-
       Trailing white spaces are unnecessary and can complicate diffs.
       See: https://google.github.io/styleguide/htmlcssguide.html#Trailing_Whitespace
     glob:
@@ -82,6 +74,7 @@ rules:
       - '<p>Yes please.'
     fail:
       - "<p>What? \n"
+      - "<p>What? "
 
   - id: 2.3.1.google.html-css.charset
     not:
@@ -90,7 +83,6 @@ rules:
         case_sensitive: false
     message: |
       Use UTF-8 (no BOM).
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Encoding
     glob:
       - "**/*.html"
@@ -106,11 +98,9 @@ rules:
       - regexp: 'TODO(?!\(\w+)'
     message: |
       Mark todos and action items with TODO(contact).
-
       Highlight todos by using the keyword TODO only, not other common formats like @@.
       Append a contact (username or mailing list) in parentheses as with the format TODO(contact).
       Append action items after a colon as in TODO: action item.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Action_Items
     glob:
       - "**/*.html"
@@ -128,13 +118,9 @@ rules:
         case_sensitive: false
     message: |
       Use HTML5.
-
       HTML5 (HTML syntax) is preferred for all HTML documents: <!DOCTYPE html>.
-
       (It’s recommended to use HTML, as text/html. Do not use XHTML. XHTML, as application/xhtml+xml, lacks both browser and infrastructure support and offers less room for optimization than HTML.)
-
       Although fine with HTML, do not close void elements, i.e. write <br>, not <br />.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Document_Type
     glob:
       - "**/*.html"
@@ -144,31 +130,17 @@ rules:
 
   - id: 3.1.1.google.html.void.elements
     pattern: 
-      - regexp: <!DOCTYPE (?!html>|HTML>)\w+
       - regexp: (area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)[^>].*\/>
     message: |
       Use HTML5.
-
       HTML5 (HTML syntax) is preferred for all HTML documents: <!DOCTYPE html>.
-
       (It’s recommended to use HTML, as text/html. Do not use XHTML. XHTML, as application/xhtml+xml, lacks both browser and infrastructure support and offers less room for optimization than HTML.)
-
       Although fine with HTML, do not close void elements, i.e. write <br>, not <br />.
     glob:
       - "**/*.html"
     pass:
-      - <!DOCTYPE html>
-      - <!DOCTYPE HTML>
       - <br>
     fail:
-      - <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-      - <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-      - <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      - <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-      - <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-      - <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-      - <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
-      - <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
       - <br />
       - <input type="submit" value="Ok" />
 
@@ -177,9 +149,7 @@ rules:
         - regexp: <img( *(?!alt=")\w*="[^"\r\n]*")*>|alt=""
     message: |
       Provide alternative contents for multimedia.
-
       For multimedia, such as images, videos, animated objects via canvas, make sure to offer alternative access.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Multimedia_Fallback
     justification:
       - (For images whose alt attributes would introduce redundancy, and for images whose purpose is purely decorative which you cannot immediately use CSS for, use no alternative text, as in alt="".)
@@ -218,9 +188,7 @@ rules:
         case_sensitive: false
     message: |
       Separate structure between presentation from behavior.
-
       Separating structure from presentation from behavior is important for maintenance reasons.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Separation_of_Concerns
     glob:
       - "**/*.html"
@@ -237,9 +205,7 @@ rules:
       regexp: '\&#?(?!32|34|39|38|60|62|quot|apos|amp|lt|gt|nbsp)\w+;'
     message: |
       Do not use entity references.
-
       There is no need to use entity references like &mdash;, &rdquo;, or &#x263a;, assuming the same encoding (UTF-8) is used for files and editors as well as among teams.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Entity_References
     justification:
       - The only exceptions apply to characters with special meaning in HTML (like < and &) as well as control or “invisible” characters (like no-break spaces).
@@ -263,9 +229,7 @@ rules:
       case_sensitive: false
     message: |
       Omit optional tags (optional).
-
       For file size optimization and scannability purposes, consider omitting optional tags. The HTML5 specification defines what tags can be omitted.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Document_Type
     glob:
       - "**/*.html"
@@ -287,7 +251,6 @@ rules:
       Omit type attributes for style sheets and scripts.
       
       Specifying type attributes in these contexts is not necessary as HTML5 implies text/css and text/javascript as defaults. This can be safely done even for older browsers.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#type_Attributes
     justification:
       - Do not use type attributes for style sheets (unless not using CSS) and scripts (unless not using JavaScript).
@@ -305,11 +268,8 @@ rules:
       - regexp: <(blockquote|ul|ol|table)([^>])*>[^\n]
     message: |
       Use a new line for every block, list, or table element, and indent every such child element.
-
       Independent of the styling of an element (as CSS allows elements to assume a different role per display property), put every block, list, or table element on a new line.
-
       Also, indent them if they are child elements of a block, list, or table element.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#General_Formatting
     justification:
       - (If you run into issues around whitespace between list items it’s acceptable to put all li elements in one line. A linter is encouraged to throw a warning instead of an error.)
@@ -345,9 +305,7 @@ rules:
       regexp: \w{2,} ?= ?'[^"\r\n]*'
     message: |
       When quoting attributes values, use double quotation marks.
-
       Use double ("") rather than single quotation marks ('') around attribute values.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#HTML_Quotation_Marks
     glob:
       - "**/*.html"
@@ -363,9 +321,7 @@ rules:
       regexp: .\w+(#|\.)[^\d][^"\r\n]* {
     message: |
       Avoid qualifying ID and class names with type selectors.
-
       Avoiding unnecessary ancestor selectors is useful for performance reasons.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Type_Selectors
     justification:
       - Unless necessary (for example with helper classes), do not use element names in conjunction with IDs or classes.
@@ -387,7 +343,6 @@ rules:
       regexp: '(?#checks for multiple 0) 0+(cm|em|ex|in|mm|pc|pt|px|%)'
     message: |
       Omit unit specification after “0” values, unless required. (Rule matches everything related to 0 and unit)
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#0_and_Units
     justification:
       - Do not use units after 0 values unless they are required.
@@ -407,9 +362,7 @@ rules:
       regexp: \ 0+\.\d+\w+
     message: |
       Omit leading “0”s in values.
-
       Do not put 0s in front of values or lengths between -1 and 1.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Leading_0s
     glob:
       - "**/*.css"
@@ -427,9 +380,7 @@ rules:
       case_sensitive: false
     message: |
       Use 3 character hexadecimal notation where possible.
-
       For color values that permit it, 3 character hexadecimal notation is shorter and more succinct.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Hexadecimal_Notation
     glob:
       - "**/*.css"
@@ -443,9 +394,7 @@ rules:
       - regexp: '(\.|#)\w+[ |A-Z|_]+\w+ [^"\r\n]*{'
     message: |
       Separate words in ID and class names by a hyphen.
-
       Do not concatenate words and abbreviations in selectors by any characters (including none at all) other than hyphens, in order to improve understanding and scannability.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#ID_and_Class_Name_Delimiters
     glob:
       - "**/*.css"
@@ -462,9 +411,7 @@ rules:
         multiline: true
     message: |
       Use a semicolon after every declaration.
-
       End every declaration with a semicolon for consistency and extensibility reasons.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Declaration_Stops
     glob:
       - "**/*.css"
@@ -480,9 +427,7 @@ rules:
       - regexp: ( |\t)*\w*:[^ \/]([^\r\n])*;
     message: |
       Use a space after a property name’s colon.
-
       Always use a single space between property and value (but no space between property and colon) for consistency reasons.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Property_Name_Stops
     glob:
       - "**/*.css"
@@ -498,11 +443,8 @@ rules:
       - regexp: '[#@](?!(?:[0-9a-fA-F]{3}){1,2})\S*[^ ](?!{)\n'
     message: |
       Use a space between the last selector and the declaration block.
-
       Always use a single space between the last selector and the opening brace that begins the declaration block.
-
       The opening brace should be on the same line as the last selector in a given rule.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Declaration_Block_Separation
     glob:
       - "**/*.css"
@@ -520,9 +462,7 @@ rules:
       - regexp: '(: ).*(: )'
     message: |
       Separate selectors and declarations by new lines.
-
       Always start a new line for each selector and declaration.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Selector_and_Declaration_Separation
     glob:
       - "**/*.css"
@@ -539,9 +479,7 @@ rules:
         multiline: true
     message: |
       Separate rules by new lines.
-
       Always put a blank line (two line breaks) between rules.
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#Rule_Separation
     glob:
       - "**/*.css"
@@ -557,9 +495,7 @@ rules:
       - regexp: url\((\".*\"|\'.*\')\)
     message: |
       Use single ('') rather than double ("") quotation marks for attribute selectors and property values.
-
       Do not use quotation marks in URI values (url()).
-
       Please see: https://google.github.io/styleguide/htmlcssguide.html#CSS_Quotation_Marks
     justification:
       - If you do need to use the @charset rule, use double quotation marks—single quotation marks are not permitted.
