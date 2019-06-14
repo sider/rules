@@ -1,0 +1,175 @@
+- id: review.sider.php.laravel.debug
+  pattern:
+    - dd(...)
+    - dump(...)
+  message: |
+    Debug code detected
+
+    Delete `dd()` or `dump()` function calls.
+
+    - https://laravel.com/docs/5.8/helpers#method-dd
+    - https://laravel.com/docs/5.8/helpers#method-dump
+
+    You can use xdebug to inspect values of variables without adding debugging function calls.
+
+- id: review.sider.php.laravel.58.deprecated
+  pattern:
+    - array_add(...)
+    - array_collapse(_)
+    - array_divide(_)
+    - array_dot(...)
+    - array_except(_,_)
+    - array_first(...)
+    - array_flatten(_)
+    - array_forget(_,_)
+    - array_get(...)
+    - array_has(_,_)
+    - array_last(...)
+    - array_only(_,_)
+    - array_pluck(...)
+    - array_prepend(...)
+    - array_pull(...)
+    - array_random(...)
+    - array_set(_,_,_)
+    - array_sort(...)
+    - array_sort_recursive(_)
+    - array_where(_,_)
+    - array_wrap(_)
+    - camel_case(_)
+    - ends_with(_,_)
+    - kebab_case(_)
+    - starts_with(_,_)
+    - snake_case(...)
+    - str_after(_,_)
+    - str_before(_,_)
+    - str_contains(_,_)
+    - str_finish(_,_)
+    - str_is(_,_)
+    - str_limit(...)
+    - str_plural(...)
+    - str_random()
+    - str_random(_)
+    - str_replace_array(_,_,_)
+    - str_replace_first(_,_,_)
+    - str_replace_last(_,_,_)
+    - str_singular(_)
+    - str_slug(...)
+    - str_start(_,_)
+    - studly_case(_)
+    - title_case(_)
+  message: |
+    Deprecated helper functions detected
+
+    These global helpers are deprecated in 5.8, and will be deleted in 5.9.
+
+    Use the original functions in `Illuminate\Support\Arr` and `Illuminate\Support\Str`.
+    You can install the `laravel/helpers` package for compatibility.
+
+    - https://laravel.com/docs/5.8/upgrade#string-and-array-helpers
+
+- id: review.sider.php.laravel.laravel-best-practices.where-eq
+  pattern:
+    - _->where(_, "=", _)
+    - _::where(_, "=", _)
+  message: |
+    You can omit `"="` from `where` conditions
+
+    ```
+    // Longer form
+    $x->where('column', '=', 1);
+    // Shorter form (better!!)
+    $x->where('column', 1);
+    ```
+
+    - https://github.com/alexeymezenin/laravel-best-practices#use-shorter-and-more-readable-syntax-where-possible
+  test:
+    fail:
+      - User::where('age', '=', 30);
+      - $user->where('age', '=', 37);
+    pass:
+      - User::where('age', 30);
+      - $user->where('age', 37);
+
+- id: review.sider.php.laravel.laravel-best-practices.now-today
+  pattern:
+    - Carbon::now()
+    - Carbon::today()
+  message: |
+    Use now() and today() function
+
+    - https://github.com/alexeymezenin/laravel-best-practices#use-shorter-and-more-readable-syntax-where-possible
+  test:
+    fail:
+      - Carbon::now();
+      - Carbon::today();
+    pass:
+      - now();
+      - today();
+
+- id: review.sider.php.laravel.laravel-best-practices.request
+  pattern:
+    - $request->input(:string:)
+    - Request::get(:string:)
+  message: |
+    You can access the request input value as `$request->value` or `request("value")`
+
+    - https://github.com/alexeymezenin/laravel-best-practices#use-shorter-and-more-readable-syntax-where-possible
+  test:
+    fail:
+      - $request->input("id")
+      - Request::get("id")
+    pass:
+      - $request->input(key)
+      - $request->id
+      - request('id')
+
+- id: review.sider.php.laravel.laravel-best-practices.request-has
+  pattern:
+    - $request->has(:string:)
+  message: |
+    You may try `input()` method with a default value
+
+    Passing a default value to `input()` function may make your code better.
+
+    ```
+    $request->has('value') ? $request->value : 'default';  // Using has()
+    $request->input('value', 'default');                   // Using input() with default
+    ```
+
+    - https://github.com/alexeymezenin/laravel-best-practices#use-shorter-and-more-readable-syntax-where-possible
+  justification:
+    - You need to test if a value from a user is sent and implement more things.
+  test:
+    fail:
+      - |
+        $request->has('value') ? $request->value : 'default';
+    pass:
+      - |
+        $request->input('value', 'default');
+
+- id: review.sider.php.laravel.laravel-best-practices.validation
+  pattern:
+    _->validate(_)
+  message: |
+    Don't validate in a controller, create a "form request" instead
+
+    https://github.com/alexeymezenin/laravel-best-practices#validation
+  test:
+    fail:
+      - |
+        $request->validate([
+                'title' => 'required|unique:posts|max:255',
+                'body' => 'required',
+            ]);
+    pass:
+      - |
+        class PostRequest extends Request
+        {
+            public function rules()
+            {
+                return [
+                    'title' => 'required|unique:posts|max:255',
+                    'body' => 'required',
+                ];
+            }
+        }
