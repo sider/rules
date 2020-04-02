@@ -1,0 +1,121 @@
+rules:
+- id: use-HSL-not-HEX
+  pattern:
+    regexp: '#(?:[0-9a-fA-F]{3}){1,2}'
+  message: |
+    Using HSL(hue, saturation, lightness) is a better way to work with colors.
+    It's much easier to find colors with the same value by editing the hue.
+    It also works well for programmatic color control.
+   
+    https://css-tricks.com/hsl-hsla-is-great-for-programmatic-color-control/
+  fail:
+    - '#FF0000'
+    - '#0ff'
+  pass:
+    - 'hsl(0, 100%, 50%)'
+- id: all-caps
+  pattern: 'uppercase'
+  message: |
+    Increase letter-spacing when using uppercase for regular fonts.
+    This improves the readability for fonts that are not intended to be used this way.
+  fail:
+    - 'text-transform: uppercase;'
+    - "textTransform: 'uppercase'"
+- id: headline-fonts
+  pattern:
+    - 'Oswald'
+    - 'Abril Fatface'
+    - 'Prata'
+  message: |
+    Make sure this font is only used for headlines. It will be difficult to read as a regular font.
+  glob: "**/*.css"
+  fail:
+    - 'Prata'
+- id: max-width-for-line-length
+  not:
+    pattern: 
+     - "max-width:"
+     - "maxWidth:"
+  message: |
+    The ideal length for legibility of body copy is 40-60 characters per line.
+    max-width: 34em
+  pass:
+   - "max-width: 34em"
+- id: letter-spacing
+  pattern: letter-spacing
+  message: |
+    The typeface designer designed the font with the correct letter spacing.
+    Use letter-spacing when you are using the font for a purpose outside of the designers intended use.
+  fail:
+   - "letter-spacing: -1px;"
+- id: relative-font-size
+  pattern:
+    regexp: 'font-size: \d+(.\d+)?em'
+  message: |
+    When scaling fonts, titles need to be scaled down more than the regular text.
+    Using absolute sizes can be a better option.
+  fail:
+    - "font-size: 0.75em;"
+    - "font-size: 1em;"
+- id: Check-for-greys
+  not:
+    pattern:
+      - color-gray-
+  message: |
+    Consider including a color system with a few shades of grey so you don't have to compromise.
+    This also helps speed up selection by reducing the amount of greys to select from.
+    Also name it by lightness between 0 and 100 for easy reference. e.g. color-gray-05.
+  
+    https://medium.com/eightshapes-llc/color-in-design-systems-a1c80f65fa3
+  glob: "**/*.css"
+- id: avoid-CSS-preprocessor-functions
+  pattern:
+    - lighten(
+    - darken(
+  message: |
+    Consider picking your own colors for better results.
+    For example yellows look muddy and off if you try to darken them.
+
+    https://material.io/design/color/the-color-system.html#tools-for-picking-colors
+  fail:
+    - darken( $base-color, 10% )
+    - lighten( $base-color, 10% )
+- id: saturate-greys
+  pattern:
+    regexp: 'hsl\(0, 0%, ([^0]\d{0,1})%\)'
+  message: |
+    Consider giving your greys some mood by saturating it with some colors.
+    Neutral Greys S: 0%
+    Cool Greys H: 207-210 S: 12-21%
+    Warm Greys H: 39-41 S: 12-21%
+
+    https://uxmovement.com/content/how-color-saturation-affects-user-efficiency/
+  fail:
+    - hsl(0, 0%, 1%)
+    - hsl(0, 0%, 50%)
+  pass:
+    - hsl(39, 12%, 10%)
+- id: visual-hierarchy
+  pattern:
+    regexp: 'font-size: [3-9][0-9]px'
+  message:
+    Consider the visual hierarchy.
+    Is this used for supportive content?
+    If so, consider reducing the size so that it is more of a label.
+- id: icon-balance
+  pattern:
+    token: <i
+  message: |
+    Balance icons with type.
+    Icons take up more surface area.
+    Consider using a lighter color to create weight and contrast balance.
+  fail:
+    - <i class="material-icons" style="font-size:24px;">cloud</i>
+  pass:
+    - <img
+- id: icons-size
+  pattern:
+    regexp: '<i.+font-size:([3-9][0-9]|[2][5-9])'
+  message: |
+    Icons should be used at their intended size.
+    You can add an outer element such as a circle to fill space.
