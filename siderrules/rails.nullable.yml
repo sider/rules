@@ -1,0 +1,24 @@
+rules:
+  - id: rails.nullable_column
+    pattern:
+      - "_.string(:symbol:, ..., !null: _, ...)"
+      - "_.text(:symbol:, ..., !null: _, ...)"
+      - "_.integer(:symbol:, ..., !null: _, ...)"
+      - "_.datetime(:symbol:, ..., !null: _, ...)"
+      - "_.boolean(:symbol:, ..., !null: _, ...)"
+      - "_.binary(:symbol:, ..., !null: _, ...)"
+      - "_.belongs_to(:symbol:, ..., !null: _, ...)"
+      - "_.references(:symbol:, ..., !null: _, ...)"
+    message: |
+      nullableなカラムが定義されますが意図通りですか？
+
+      Railsのカラム定義メソッドは、指定がない場合にnullを許容します。
+      nullを保存する必要がない場合には、 `null: false` の指定を追加してください。
+      （nullableなカラムにしたい場合は `null: true` と書くか、このままクローズしてください。）
+
+      - https://guides.rubyonrails.org/active_record_migrations.html#creating-a-table
+    justification:
+      - nullableなカラムを定義したい場合
+    examples:
+      - before: 't.string :email'
+        after: 't.string :email, null: false'

@@ -1,0 +1,7 @@
+rules:
+  - id: no-return-type
+    pattern:
+      token: ReturnType<
+    message: ReturnType を使うと型注釈の間違いがわからなくなるので、型を書けるときには書いてください
+    fail:
+      - "ReturnType<foo>"

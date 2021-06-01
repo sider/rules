@@ -1,0 +1,20 @@
+rules:
+  - id: setup
+    pattern:
+      - token: def setup
+      - token: def teardown
+    message: |
+      setupやteardownを定義する場合には忘れずに `super` しましょう
+      
+      これを忘れると、例えば `rr` などのテストのライフサイクルに依存するライブラリが正常に動作しなくなります。
+      また `add_setup_hook` や `add_teardown_hook` などのメソッドを使うのも良い方法です。
+
+    glob:
+      - "test/**/*_test.rb"
+      - "test/**/test_*.rb"
+    fail:
+      - def setup; end
+      - def teardown; end
+    pass:
+      - add_setup_hook { setup_fixture }
+      - add_teardown_hook FixtureCleanup

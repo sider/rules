@@ -1,0 +1,10 @@
+rules:
+  - id: reiwa
+    pattern: 令和
+    message: |
+      元号の表記にはU+F9A8（互換漢字）ではなくU+4EE4を使ってください
+
+      正：令和
+      誤：令和
+    fail: 令和元年
+    pass: 令和元年

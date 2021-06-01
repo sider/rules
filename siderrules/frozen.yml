@@ -1,0 +1,10 @@
+rules:
+  - id: frozen
+    not:
+      pattern: "frozen_string_literal: true"
+    message: |
+      Specify frozen_string_literal magic comment.
+    glob:
+      - "**/*.rb"
+    pass:
+      "# frozen_string_literal: true"
