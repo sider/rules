@@ -1,0 +1,19 @@
+rules:
+  - id: csv_foreach
+    pattern: "CSV.foreach(..., !quote: _)"
+    message: |
+      クオートなしのCSVを読む場合には `quote: nil` を指定すると高速です
+
+      CSVライブラリのメンテナであるSutouさんからの情報です。
+
+      - https://docs.ruby-lang.org/ja/latest/class/CSV.html#S_FOREACH
+      - https://slide.rabbit-shocker.org/authors/kou/rubykaigi-2019/
+    examples:
+      - before: |
+          CSV.foreach("foo.csv") do |csv|
+            pp csv
+          end
+        after: |
+          CSV.foreach("foo.csv", quote: nil) do |csv|
+            pp csv
+          end

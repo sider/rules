@@ -1,0 +1,26 @@
+rules:
+  - id: csv_generate_line
+    pattern: "CSV.generate_line"
+    message: |
+      複数行のCSVファイルを生成するには、 CSV.generate_line よりも << を使った方が高速です
+
+      行数が多い場合には、6〜7倍もの差が生じます。
+
+      - https://slide.rabbit-shocker.org/authors/kou/rubykaigi-2019/
+      - https://github.com/rurema/doctree/pull/1841
+    justification:
+      - 行数が少ないので性能を気にする必要がない場合
+      - 1行のCSVデータが欲しい場合
+    examples:
+      - before: |
+          string = ""
+          data.each do |row|
+            string << CSV.generate_line(row)
+          end
+        after: |
+          string = ""
+          CSV.new(StringIO.new(string)).tap do |csv|
+            data.each do |row|
+              csv << row
+            end
+          end

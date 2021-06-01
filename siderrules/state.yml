@@ -1,0 +1,18 @@
+rules:
+  - id: state
+    pattern:
+      token: type State=typeof
+    message: |
+      Stateの型を値から定義するのは避けましょう
+
+      - https://twitter.com/mizchi/status/1127836918417223682  
+    glob:
+      - "**/*.ts"
+      - "**/*.tsx"
+    fail:
+      - "type State = typeof initialState"
+    pass:
+      - "type State = { user: User, page: Page }"
+
+exclude:
+  - node_modules

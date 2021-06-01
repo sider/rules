@@ -1,0 +1,36 @@
+rules:
+  - id: clean-test-code.it
+    pattern: it() {}
+    message: |
+      `it` の説明を省略すると後でわからなくなるので書きましょう
+      
+      https://speakerdeck.com/willnet/clean-test-code-revised?slide=29
+    examples:
+      - before: "it { expect(1+2).to eq(3) }"
+        after: "it('adds') { expect(1+2).to eq(3) }"
+  
+  - id: clean-test-code.let
+    pattern: let(:symbol:) {}
+    message: |
+      `let` と `let!` のどちらでも良い場合には `let!` を使いましょう
+      
+      https://speakerdeck.com/willnet/clean-test-code-revised?slide=52
+    examples:
+      - before: "let(:user) { User.create!() }"
+        after: "let!(:user) { User.create!() }"
+  
+  - id: clean-test-code.shared_context
+    pattern:
+      - shared_context
+      - shared_example
+    message: |
+      `shared_context`/`shared_example` を使うと本当に読みやすくなりますか？
+      
+      DRYにすることは大切ですが、DRYにすることの目的は読みやすさです。
+      読みやすさに貢献するか考えてから、shared_contextを使いましょう。
+      
+      https://speakerdeck.com/willnet/clean-test-code-revised?slide=112
+    examples: 
+      - before: |
+          RSpec.shared_context "shared stuff", :shared_context => :metadata do
+          end

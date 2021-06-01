@@ -1,0 +1,13 @@
+rules:
+  - id: pp
+    pattern: 
+      subject: "require(..., :string: as 'pp, ...)"
+      where:
+        pp: "pp"
+    message: Ruby 2.5以降ではppをrequireする必要がなくなりました
+    examples:
+      - before: require("pp", "set")
+      - before: require "pp"
+      - before: require("strscan", "pp")
+      - after: require(pp)
+

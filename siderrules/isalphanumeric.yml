@@ -1,0 +1,26 @@
+rules:
+  - id: review.sider.commons.stringutils.isalphanumeric
+    pattern:
+      - token: StringUtils.isAlphanumeric(
+      - token: StringUtils.isAlpha(
+    message: |
+      文字列が半角英数字か調べるには、CharUtilsを使ってください
+
+      `StringUtils.isAlphanumeric` や `StringUtils.isAlpha` は、ユニコードで定義された「文字 (letter)」や「数字 (digits)」に基づいて、文字列を検査します。
+      つまり、漢字や平仮名を含むような文字列も `true` と判定されます。
+      句読点やスペースを含む場合には `false` となります。
+      
+      半角英数字（ASCIIの範囲での文字）かどうかを判定するには、 `CharUtils.isAsciiAlphanumeric` や `CharUtils.isAsciiAlpha` を使ってください。
+
+      - https://commons.apache.org/proper/commons-lang/javadocs/api-3.8.1/org/apache/commons/lang3/StringUtils.html#isAlphanumeric-java.lang.CharSequence-
+      - https://commons.apache.org/proper/commons-lang/javadocs/api-3.8.1/org/apache/commons/lang3/StringUtils.html#isAlpha-java.lang.CharSequence-
+      - https://commons.apache.org/proper/commons-lang/javadocs/api-3.8.1/org/apache/commons/lang3/CharUtils.html#isAsciiAlphanumeric-char-
+      - https://commons.apache.org/proper/commons-lang/javadocs/api-3.8.1/org/apache/commons/lang3/CharUtils.html#isAsciiAlpha-char-
+    glob:
+      - "**/*.java"
+    fail:
+      - StringUtils.isAlphanumeric(string);
+      - StringUtils.isAlpha(string);
+    pass:
+      - string.chars().allMatch(i -> CharUtils.isAsciiAlphanumeric((char)i));
+      - string.chars().allMatch(i -> CharUtils.isAsciiAlpha((char)i));

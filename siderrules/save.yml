@@ -1,0 +1,13 @@
+rules:
+  - id: savebang
+    pattern: save! [conditional]
+    message: |
+      save! の返り値には意味がありません
+      
+      save! が失敗したときには、例外によって通知されます。
+      返り値を確認する必要はありません。
+    examples:
+      - before: |
+          if person.save!
+          end
+        after: person.save!

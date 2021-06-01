@@ -1,0 +1,31 @@
+rules:
+  - id: i18n
+    pattern:
+      - token: I18n.t
+      - token: I18n.translate
+    message: |
+      I18n.tはヘルパ経由で呼び出しましょう
+
+      ```rb
+      # 正
+      translate(:hello_world)
+      # 誤:
+      I18n.translate(:hello_world)
+      ```
+
+      ヘルパメソッドを使うと、
+
+      - メッセージがなかった場合に目立つようにCSSでマークしてくれる
+      - キーを `.` で始めた場合に自動でコントローラ名などを補ってくれる
+
+      などの利益があります。
+    glob:
+      - "app/controllers/**/*.rb"
+      - "app/views/**/*.erb"
+      - "app/views/**/*.html.haml"
+    pass:
+      - t(:hello_world)
+      - translate(".hello_world")
+    fail:
+      - I18n.t(:hello_world)
+      - I18n.translate("foo_controller.hello_world")

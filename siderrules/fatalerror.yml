@@ -1,0 +1,9 @@
+rules:
+  - id: fatalerror
+    pattern: fatalError
+    message: |
+      fatalErrorを使う必要がありますか？
+      
+      - アプリケーションをクラッシュ（終了ではなく）させる必要があるくらい例外的な状況ですか？
+      - キャストの失敗などをわざわざ別のfatalErrorにする必要はありますか？
+    glob: '**/*.swift'

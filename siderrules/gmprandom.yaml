@@ -1,0 +1,16 @@
+- id: gmp_random
+  pattern: gmp_random(_)
+  message: |
+    gmp_random ではなく gmp_random_range を使ってください
+
+    この関数は、PHP 7.2 で非推奨となりました。
+    gmp_random で得られる乱数の上限はプラットフォーム依存で、ユーザーが事前に確認することはできません。    
+    上限と下限が指定できる、より柔軟な gmp_random_range 関数を利用してください。
+
+    - https://wiki.php.net/rfc/deprecations_php_7_2#gmp_random
+    - https://www.php.net/manual/ja/function.gmp-random-range.php
+  test:
+    fail:
+      - gmp_random(1)
+    pass:
+      - gmp_random_range(0, 100)

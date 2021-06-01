@@ -1,0 +1,31 @@
+rules:
+  - id: or
+    pattern: 
+      subject: "_.'x.or(_)"
+      where:
+        x: /.+/
+    message: |
+      ActiveRecordの `or` は、レシーバと引数の論理和を計算します
+
+      この挙動により、レシーバが複数の条件を含む場合に期待と違う結果になることがあります。
+
+      ```rb
+      where(cond1).where(cond2).or(where(cond3))
+      ```
+
+      は `(cond1 && cond2) || cond3` の意味になります。
+      `cond1 && (cond2 || cond3)` としたい場合には、 `or` をその前に書きましょう。
+
+      ```rb
+      where(cond2).or(where(cond3)).where(cond1)
+      ```
+
+      `or` を使う場合には `merge` と組み合わせたり、アドホックに書くのを避けて `or` を使ったscopeを定義するのが良いでしょう。
+
+      - https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-or
+    examples:
+      - before: "user.articles.published.or(draft)"
+        after: "user.articles.merge(published.or(draft))"
+      - after: |
+          # `or` だけを含むスコープを定義して使う
+          scope :accessible, -> { published.or(draft) }

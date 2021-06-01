@@ -1,0 +1,14 @@
+rules:
+  - id: timecop.travel
+    pattern: Timecop.travel
+    message: |
+      Timecop.freezeを使いましょう
+      
+      Timecop.travelは時間を動かした後、時計が進みます。
+      また、このアプリではデータベースで時刻の分解能が1秒しかありません。
+      つまり、テストにかかる時間によって成功したり失敗したりすることがあります。
+
+      普通はTimecop.freezeで足りるはずです。
+    examples:
+      - before: Timecop.travel(2019,4,1)
+        after: Timecop.freeze(2019,4,1)

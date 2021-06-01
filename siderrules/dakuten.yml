@@ -1,0 +1,12 @@
+rules:
+  - id: dakuten
+    pattern:
+      - ゙
+      - ゚
+    message: |
+      NFDではなくNFCにしてください
+
+      macOSのファイルシステムなどでは、濁点、半濁点を別の文字として処理するNFDと呼ばれる正規化方法が採用されています。
+      これらから文字列をコピーすると、ソースコードにNFDが含まれることがあります。
+
+      - https://ja.wikipedia.org/wiki/Unicode正規化

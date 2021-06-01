@@ -1,0 +1,40 @@
+rules:
+  - id: xss
+    pattern:
+      - token: location.open
+      - token: location.href=
+      - token: location.assign
+      - token: document.write
+      - token: srcdoc=
+      - token: src=
+      - token: InnerText=
+      - token: formAction=
+      - token: href=
+      - token: innerHTML=
+      - token: textContent=
+      - token: action=
+    message: |
+      XSSを防ぐため、これらのAPIにユーザー入力由来の値を与える場合には、安全な値か検査をしましょう
+
+      例えば、次の様なコードでJSが実行されます。
+      ```
+      document.querySelector("img").src = "javascript:alert('Hello');"
+      ```
+    glob:
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+    fail:
+      - location.open(url);
+      - location.href = url;
+      - location.assign(url);
+      - document.write(x);
+      - elem.srcdoc = input;
+      - elem.src = input;
+      - elem.InnerText = input;
+      - <Element formAction={input} />
+      - elem.href = input;
+      - elem.innerHTML = input;
+      - elem.textContent = input;
+      - elem.action=input;

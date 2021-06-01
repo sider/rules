@@ -1,0 +1,10 @@
+rules:
+  - id: atokabu
+    pattern:
+      regexp: 株式会社\s*Sider
+    message: 当社は「Sider株式会社」です
+    pass:
+      - Sider株式会社
+    fail:
+      - 株式会社Sider
+      - 株式会社 Sider

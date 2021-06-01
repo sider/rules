@@ -1,0 +1,14 @@
+- id: parse_str
+  pattern: parse_str(_)
+  message: |
+    parse_str を使う場合には第2引数を指定してください
+
+    PHP 7.2から、第二引数を省略することは非推奨となりました。
+    入力される文字列によって、意図しない変数の代入が発生するため、必ず第2引数を指定してください。
+
+    - https://www.php.net/manual/ja/function.parse-str.php
+  test:
+    fail:
+      - parse_str("password=topsecret");
+    pass:
+      - parse_str("password=topsecret", $output);

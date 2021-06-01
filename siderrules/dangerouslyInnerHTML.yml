@@ -1,0 +1,17 @@
+rules:
+  - id: dangerouslySetInnerHTML
+    pattern: 
+      token: dangerouslySetInnerHTML=
+    message: |
+      dangerouslySetInnerHTML でエスケープが漏れないか注意しましょう
+
+      過去に、
+
+      - 国際化を通してHTMLタグが埋め込まれてしまった
+      - iPadのデバイス名を通してHTMLタグが埋め込まれてしまった
+
+      などの事件が発生しています。
+    glob:
+      - "frontend/**/*.jsx"
+    fail:
+      - "return <div dangerouslySetInnerHTML={createMarkup()} />;"      
